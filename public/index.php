@@ -1,5 +1,7 @@
+
+
 <?php
-require_once("../negocio/Formulario/NDatosPeronsales.php");
+require_once("../negocios/NDatosPersonales.php");
 header("Access-Control-Allow-Origin: http://localhost:8080");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
@@ -13,7 +15,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['REQUEST_URI'] === '/') {
    echo "chau";
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/formulario') {     
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/saveDatosPersonales') {     
+
+        
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        $formulario = new NDatosPersonales();
+        $total = $formulario->saveDatosPersonales($data);
+}  
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/save') {     
     
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
@@ -102,18 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/totalA
     }
     
 }  
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/verificarYGuardar') {     
 
-        
 
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        
-        $formulario = new NFormulario();
-        $total = $formulario->verificarYGuardar($data);
-        
-        
-}  
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/buscar') {     
     
         $json = file_get_contents('php://input');
