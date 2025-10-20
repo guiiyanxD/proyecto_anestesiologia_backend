@@ -7,23 +7,43 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json; charset=utf-8');
-/**
- * Aqui empiezan las rutas de Cargo
- */
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/saveDatosPersonales') {     
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+    $formulario = new NDatosPersonales();
+    $total = $formulario->saveDatosPersonales($data);
+}  
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['REQUEST_URI'] === '/') {        
    echo "chau";
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/saveDatosPersonales') {     
 
-        
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
 
-        $formulario = new NDatosPersonales();
-        $total = $formulario->saveDatosPersonales($data);
-}  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/save') {     
     

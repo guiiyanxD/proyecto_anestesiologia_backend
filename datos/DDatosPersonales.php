@@ -9,13 +9,24 @@ class DDatosPersonales {
     }
     
     public function save($data) {
-        $query = "INSERT INTO `proyecto-anestesiologia.info_pacietes.datos_pacientes` (id) VALUES (?)";
+        $query = "INSERT INTO `proyecto-anestesiologia.info_pacietes.datos_pacientes` (id, fechaNacimiento, fechaCirugia, genero, peso, talla, imc, asa, tipoCirugia, otraCirugia, edad, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         $rowData = [
-            'id' => $data['id']
+            'id'                => $data['id'],
+            'fechaNacimiento'   => $data['fechaNacimiento'],
+            'fechaCirugia'      => $data['fechaCirugia'],
+            'genero'            => $data['genero'],
+            'asa'               => $data['asa'],
+            'tipoCirugia'       => $data['tipoCirugia'],
+            'otraCirugia'       => $data['otraCirugia'],
+            'edad'              => (int)$data['edad'],
+            'imc'               => (float)$data['imc'],
+            'peso'              => (float)$data['peso'],
+            'talla'             => (float)$data['talla'],
+            'created_at'        => $data['created_at']
+
         ];
         $table = $this->connection->getTable();
         try {
-            // Insertar con formato correcto
             $response = $table->insertRows([
                 ['data' => $rowData]
             ]);
@@ -23,28 +34,13 @@ class DDatosPersonales {
             if ($response->isSuccessful()) {
                 return true;
             } else {
-                $message = "";
-                
-                // Debug detallado
+                $message = "Error de BigQuery al insertar datos";
                 $failedRows = $response->failedRows();
-                if (!empty($failedRows)) {
-                    foreach ($failedRows as $index => $failedRow) {
-                        $message .=   "Fila {$index} falló:\n";
-                        foreach ($failedRow['errors'] as $error) {
-                            $message .= "  - {$error['reason']}: {$error['message']}\n";
-                        }
-                    }
-                }
-
-                return false;
+                
+                throw new \Exception($message);
             }
-            
-        } catch (\Google\Cloud\Core\Exception\GoogleException $e) {
-            echo " Google Exception: " . $e->getMessage() . "\n";
-            return false;
-        } catch (Exception $e) {
-            echo " General Exception: " . $e->getMessage() . "\n";
-            return false;
+        } catch (\Exception $e) {
+            throw new \Exception("Error al guardar los datos en la BD");
         }
     }
         

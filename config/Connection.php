@@ -16,11 +16,11 @@ class Connection{
     public function __construct() {
         if($this->bigQuery == null){
             $this->bigQuery = new BigQueryClient([
-                'keyFilePath' => '../proyecto-anestesiologia-c14a6b416843.json',
-                'projectId' => 'proyecto-anestesiologia',
+                'keyFilePath' => '../plenary-glass-470415-k1-58a5f3c2565c.json',
+                'projectId' => 'plenary-glass-470415-k1',
             ]);
-            $this->dataset = $this->bigQuery->dataset('info_pacientes');
-            $this->table = $this->dataset->table('datos_pacientes');
+            $this->dataset = $this->bigQuery->dataset('second_proy_at');
+            $this->table = $this->dataset->table('datos_personales');
         }
     }
 
@@ -38,60 +38,6 @@ class Connection{
 
     public function setTable($tableName) {
         $this->table = $this->dataset->table($tableName);
-    }
-
-    public function insertData() {
-    // Preparar datos
-        $rowData = [
-            'fecha' => 'Ya llego camacho', 
-            'servicio' => 'el gober', 
-            'ingreso' => 0, 
-            'ing_traslado' => 1, 
-            'egreso' => 2, 
-            'egreso_traslado' => 3, 
-            'obito' => 4, 
-            'aislamiento' => 5,
-            'bloqueada' => 6, 
-            'total' => 7, 
-            'dotacion' => 8, 
-            'libre' => 9
-        ];
-        
-        $table = $this->getTable();
-        
-        try {
-            // Insertar con formato correcto
-            $response = $table->insertRows([
-                ['data' => $rowData]
-            ]);
-            
-            if ($response->isSuccessful()) {
-                echo "✅ Datos insertados correctamente";
-                return true;
-            } else {
-                echo "❌ Error en la inserción:\n";
-                
-                // Debug detallado
-                $failedRows = $response->failedRows();
-                if (!empty($failedRows)) {
-                    foreach ($failedRows as $index => $failedRow) {
-                        echo "Fila {$index} falló:\n";
-                        foreach ($failedRow['errors'] as $error) {
-                            echo "  - {$error['reason']}: {$error['message']}\n";
-                        }
-                    }
-                }
-                
-                return false;
-            }
-            
-        } catch (\Google\Cloud\Core\Exception\GoogleException $e) {
-            echo "❌ Google Exception: " . $e->getMessage() . "\n";
-            return false;
-        } catch (Exception $e) {
-            echo "❌ General Exception: " . $e->getMessage() . "\n";
-            return false;
-        }
     }
 }
 ?>
