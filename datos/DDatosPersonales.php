@@ -17,7 +17,7 @@ class DDatosPersonales {
             'genero'            => $data['genero'],
             'asa'               => $data['asa'],
             'tipoCirugia'       => $data['tipoCirugia'],
-            'otraCirugia'       => $data['otraCirugia'],
+            'otraCirugia'       => $data['otraCirugia'] ?? "",
             'edad'              => (int)$data['edad'],
             'imc'               => (float)$data['imc'],
             'peso'              => (float)$data['peso'],
