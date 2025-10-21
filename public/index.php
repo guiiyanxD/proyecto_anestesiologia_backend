@@ -13,7 +13,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/saveDa
     $data = json_decode($json, true);
     $formulario = new NDatosPersonales();
     $total = $formulario->saveDatosPersonales($data);
-}  
+} 
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/user') {     
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+    /*header('Content-Type: application/json'); 
+    http_response_code(400); 
+    echo json_encode([
+        'status' => 'failed',
+        'message' => "Dato recibido ID: " . $data . " Mnesaje: " . $e->getMessage()
+    ]);
+    exit;*/
+    $formulario = new NDatosPersonales();
+    $total = $formulario->getUserData($data);
+} 
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['REQUEST_URI'] === '/') {        

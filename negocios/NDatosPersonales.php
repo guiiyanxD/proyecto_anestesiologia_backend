@@ -16,6 +16,7 @@ class NDatosPersonales {
 
             header('Content-Type: application/json'); 
             http_response_code(200);
+
             echo json_encode([
                 'status' => 'success',
                 'message' => 'Datos personales guardados correctamente',
@@ -29,6 +30,32 @@ class NDatosPersonales {
             echo json_encode([
                 'status' => 'failed',
                 'message' => 'Error al guardar los datos personales: ' . $e->getMessage()
+            ]);
+            exit;
+
+        }    
+    }
+
+    public function getUserData($data) {
+        try{
+            $userId = $data['id'];
+            $userData = $this->datosPersonales->getById($userId);
+
+            header('Content-Type: application/json'); 
+            http_response_code(200);
+
+            echo json_encode([
+                'status' => 'success',
+                'data' => $userData
+            ]);
+            exit;
+
+        }catch(\Exception $e){
+            header('Content-Type: application/json'); 
+            http_response_code(400); 
+            echo json_encode([
+                'status' => 'failed',
+                'message' => "Error al obtener los datos del usuario con ID: " . $data['id'] . " " . $e->getMessage()
             ]);
             exit;
 
