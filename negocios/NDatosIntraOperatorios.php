@@ -43,7 +43,7 @@ class NDatosInstraOperatorios{
     private function mapAndCleanUpdateData(array $data): array
     {
         return [
-            'userId'                        => (string)$data['userId'],
+            'id'                            => (string)$data['userId'],
             'induccionPropofol'             => (int)$data['induccionPropofol'],
             'induccionDexmedetomidina'      => (int)$data['induccionDexmedetomidina'],
             'induccionLidocaina'            => (int)$data['induccionLidocaina'],
