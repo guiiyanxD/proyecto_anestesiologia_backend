@@ -1,23 +1,20 @@
 <?php
 require_once('../config/Connection.php');
-class DDatosIntraOperatorios{
+class DDatosPostOperatorios {
     private $connection;
 
     public function __construct(){
         $this->connection = new Connection();
     }
 
-    public function saveIntraOperatorios(){
-        return true;
-    }
-
-    public function insertIntraOperatorios(array $data) {
+    public function insertPostOperatorios(array $data) {
         $rowData =($data);
-        $table = $this->connection->getDataset()->table('datos_intra_operatorios');
+        $table = $this->connection->getDataset()->table('datos_post_operatorios');
         try {
             $response = $table->insertRows([
                 ['data' => $rowData]
             ]);
+            
             if ($response->isSuccessful()) {
                 return true;
             } else {
@@ -34,8 +31,7 @@ class DDatosIntraOperatorios{
             }
             
         } catch (\Exception $e) {
-            throw new \Exception("Error al insertar los datos intra-operatorios: " . $e->getMessage());
+            throw new \Exception("Error al insertar los datos post-operatorios: " . $e->getMessage());
         }
     }
-
 }

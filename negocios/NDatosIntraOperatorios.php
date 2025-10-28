@@ -10,6 +10,7 @@ class NDatosInstraOperatorios{
 
     public function saveDatosIntraOperatorios($data){
         try{
+            $data['created_at'] = date("Y-m-d H:i:s");
             $data = $this->mapAndCleanUpdateData($data);
             $numFilasAfectadas = $this->capaDatos->insertIntraOperatorios($data);
             if($numFilasAfectadas === 0){
@@ -63,7 +64,8 @@ class NDatosInstraOperatorios{
             'valorFrecuenciaCardiaca'       => (String)($data['valorFrecuenciaCardiaca'] ?? "NO"),
             'valorFrecuenciaRespiratoria'   => (String)($data['valorFrecuenciaRespiratoria'] ?? "NO"),
             'valorSatO2'                    => (String)($data['valorSatO2'] ?? "NO"),
-            'valorCo2'                      => (String)($data['valorCo2'] ?? "NO")
+            'valorCo2'                      => (String)($data['valorCo2'] ?? "NO"),
+            'created_at'                    => $data['created_at']
 
         ];
     }
