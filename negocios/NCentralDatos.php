@@ -9,4 +9,12 @@ class NCentralDatos {
     public function guardarDatos($data) {
         return $this->capaDatos->guardarDatos($data);
     }
+
+    public function obtenerDatos($id) {
+        return $this->capaDatos->obtenerDatos($id);
+    }
+
+    public function actualizarDatos($id, $data) {
+        return $this->capaDatos->actualizarDatos($id, $data);
+    }
 }
