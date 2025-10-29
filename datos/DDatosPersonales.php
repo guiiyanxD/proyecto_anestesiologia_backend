@@ -1,11 +1,12 @@
 <?php
 require_once('../config/Connection.php');
+require_once('../config/Pgsql.php');
 class DDatosPersonales {
     
     private $connection;
 
     public function __construct() {
-        $this->connection = new Connection();
+        $this->connection = PgsqlConnection::getInstance()->getConection();
     }
     
     public function save($data) {
@@ -142,7 +143,68 @@ class DDatosPersonales {
     }
 
 
-    
+    /**
+     * Inserta un nuevo registro en la tabla 'pacientes_cirugia'.
+     *
+     * @param array $data Array asociativo con los datos del paciente.
+     * @return bool Retorna true si la inserción fue exitosa.
+     * @throws \Exception Si la inserción falla.
+     */
+    public function savePgsql(array $data): bool {
         
+        // 1. La consulta SQL con marcadores de posición (placeholders) para seguridad
+        $sql = "INSERT INTO pacientes_cirugia (
+            id, \"fechaNacimiento\", \"fechaCirugia\", genero, asa, \"tipoCirugia\", 
+            \"otraCirugia\", edad, imc, peso, talla, created_at
+        ) VALUES (
+            :id, :fechaNacimiento, :fechaCirugia, :genero, :asa, :tipoCirugia, 
+            :otraCirugia, :edad, :imc, :peso, :talla, :created_at
+        )";
+
+        try {
+            // 2. Preparar la declaración
+            $stmt = $this->connection->prepare($sql);
+
+            // 3. Unir los parámetros (Binding)
+            // Se usa bindValue con el tipo de dato explícito de PDO para mayor seguridad
+            
+            // Strings
+            $stmt->bindValue(':id', $data['id'], PDO::PARAM_STR);
+            $stmt->bindValue(':genero', $data['genero'], PDO::PARAM_STR);
+            $stmt->bindValue(':asa', $data['asa'], PDO::PARAM_STR);
+            $stmt->bindValue(':tipoCirugia', $data['tipoCirugia'], PDO::PARAM_STR);
+            $stmt->bindValue(':otraCirugia', $data['otraCirugia'] ?? "", PDO::PARAM_STR);
+            
+            // Fechas (PostgreSQL las acepta como STR)
+            $stmt->bindValue(':fechaNacimiento', $data['fechaNacimiento'], PDO::PARAM_STR);
+            $stmt->bindValue(':fechaCirugia', $data['fechaCirugia'], PDO::PARAM_STR);
+            $stmt->bindValue(':created_at', $data['created_at'], PDO::PARAM_STR);
+
+            // Entero
+            $stmt->bindValue(':edad', (int)$data['edad'], PDO::PARAM_INT);
+            
+            // Flotantes/Numéricos (PostgreSQL los acepta como STR o puedes usar PARAM_STR)
+            $stmt->bindValue(':imc', (float)$data['imc'], PDO::PARAM_STR);
+            $stmt->bindValue(':peso', (float)$data['peso'], PDO::PARAM_STR);
+            $stmt->bindValue(':talla', (float)$data['talla'], PDO::PARAM_STR);
+
+            // 4. Ejecutar la declaración
+            $success = $stmt->execute();
+            
+            if (!$success) {
+                 // Puedes obtener información de error si la ejecución falla
+                $errorInfo = $stmt->errorInfo();
+                error_log("Error SQL: " . print_r($errorInfo, true));
+                throw new \Exception("Error al ejecutar la consulta SQL.");
+            }
+
+            return true;
+
+        } catch (\PDOException $e) {
+            // Manejar errores de PDO (conexión, sintaxis, etc.)
+            error_log("PDO Error en save(): " . $e->getMessage());
+            throw new \Exception("Error de persistencia al guardar el paciente.");
+        }
+    }  
 }
 

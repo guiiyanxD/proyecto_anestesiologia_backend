@@ -12,7 +12,7 @@ class NDatosPersonales {
             $id = uniqid();
             $data['id'] = $id;
             $data['created_at'] = date("Y-m-d H:i:s");
-            $this->datosPersonales->save($data);
+            $this->datosPersonales->savePgsql($data);
 
             header('Content-Type: application/json'); 
             http_response_code(200);

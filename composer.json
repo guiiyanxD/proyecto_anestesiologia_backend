@@ -1,6 +1,7 @@
 {
     "require": {
         "google/cloud-bigquery": "^1.34",
-        "google/auth": "^1.48"
+        "google/auth": "^1.48",
+        "vlucas/phpdotenv": "^5.6"
     }
 }
