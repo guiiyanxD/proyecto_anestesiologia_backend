@@ -30,8 +30,6 @@ class PgsqlConnection {
     }
 
     public function getConnection() {
-        echo "base de datos conectada existosamente";
-        exit();
         return $this->pdo;
     }
 }

@@ -12,6 +12,8 @@ class NDatosPersonales {
             $id = uniqid();
             $data['id'] = $id;
             $data['created_at'] = date("Y-m-d H:i:s");
+            //print_r($data);
+            //exit;
             $this->datosPersonales->savePgsql($data);
 
             header('Content-Type: application/json'); 
