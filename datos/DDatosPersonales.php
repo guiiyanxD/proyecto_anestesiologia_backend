@@ -10,139 +10,29 @@ class DDatosPersonales {
         $this->connection->getConnection();
     }
     
-    public function save($data) {
-        $query = "INSERT INTO `plenary-glass-470415-k1.second_proy_at.datos_personales` (id, fechaNacimiento, fechaCirugia, genero, peso, talla, imc, asa, tipoCirugia, otraCirugia, edad, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-        $rowData = [
-            'id'                => $data['id'],
-            'fechaNacimiento'   => $data['fechaNacimiento'],
-            'fechaCirugia'      => $data['fechaCirugia'],
-            'genero'            => $data['genero'],
-            'asa'               => $data['asa'],
-            'tipoCirugia'       => $data['tipoCirugia'],
-            'otraCirugia'       => $data['otraCirugia'] ?? "",
-            'edad'              => (int)$data['edad'],
-            'imc'               => (float)$data['imc'],
-            'peso'              => (float)$data['peso'],
-            'talla'             => (float)$data['talla'],
-            'created_at'        => $data['created_at']
-
-        ];
-        $table = $this->connection->getTable();
-        try {
-            $response = $table->insertRows([
-                ['data' => $rowData]
-            ]);
-            
-            if ($response->isSuccessful()) {
-                return true;
-            } else {
-                $message = "Error de BigQuery al insertar datos";
-                $failedRows = $response->failedRows();
-                
-                throw new \Exception($message);
-            }
-        } catch (\Exception $e) {
-            throw new \Exception("Error al guardar los datos en la BD");
-        }
-    }
+    
 
     public function getById($id){
-        $query = "SELECT * FROM `plenary-glass-470415-k1.second_proy_at.datos_personales` WHERE id = '".$id."' LIMIT 1";
+        $query = "SELECT * FROM datos_personales WHERE id = :id";
 
         try {
-            $options = $this->connection->getBigQuery()->query($query);
-            $job = $this->connection->getBigQuery()->runQuery($options);
-            $result = [];
-
-            $job->waitUntilComplete(); 
-
-            if ($job->isComplete()) {
-                foreach ($job as $row) {
-                    $result[] = $row;
-                }
-            }
+            $stmt = $this->connection->getConnection()->prepare($query);
             
-            if (count($result) > 0) {
-               $paciente = $result[0];
-                return $this->formatBigQueryDates($paciente);
-            } else {
-                throw new \Exception("No se encontraron datos para el ID proporcionado");
+            $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+            
+            $success = $stmt->execute();
+   
+            if (!$success) {
+                $errorInfo = $stmt->errorInfo();
+                error_log("Error SQL: " . print_r($errorInfo, true));
+                throw new \Exception("Error al ejecutar la consulta SQL.");
             }
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+
         } catch (\Exception $e) {
             throw new \Exception("Error al obtener los datos de la BD: " . $e->getMessage());
         }
     }
-
-    /**
-     * Convierte los objetos Google\Cloud\BigQuery\Date a strings de fecha.
-     * @param array $row La fila de resultados de BigQuery.
-     * @return array La fila con las fechas formateadas.
-     */
-    private function formatBigQueryDates(array $row): array
-    {
-        foreach ($row as $key => $value) {
-            
-            if ($value instanceof \Google\Cloud\BigQuery\Date || $value instanceof \Google\Cloud\BigQuery\Timestamp) {
-                $dateTimeObject = $value->get(); 
-                $row[$key] = $dateTimeObject->format('Y-m-d');
-            } 
-            
-        }
-        return $row;
-    }
-
-
-    public function updateIntraOperatorios($data) {
-
-        $query = "UPDATE `plenary-glass-470415-k1.second_proy_at.datos_personales`
-            SET 
-                isDatosIntraLoaded = ".$data['isDatosIntraLoaded'].",
-                induccionPropofol = ".$data['induccionPropofol'].",
-                induccionDexmedetomidina = ".$data['induccionDexmedetomidina'].",
-                induccionLidocaina = ".$data['induccionLidocaina'].",
-                induccionKetamina = ".$data['induccionKetamina'].",
-                mantenimientoPropofol = ".$data['mantenimientoPropofol'].",
-                mantenimientoDexmedetomidina = ".$data['mantenimientoDexmedetomidina'].",
-                mantenimientoLidocaina = ".$data['mantenimientoLidocaina'].",
-                mantenimientoKetamina = ".$data['mantenimientoKetamina'].",
-                despertar = ".$data['despertar'].",
-                tiempoQx = ".$data['tiempoQx'].",
-                presionArterial = ".$data['presionArterial'].",
-                valorPresionArterial = ".$data['valorPresionArterial'].",
-                frecuenciaCardiaca = ".$data['frecuenciaCardiaca'].",
-                valorFrecuenciaCardiaca = ".$data['valorFrecuenciaCardiaca'].",
-                frecuenciaRespiratoria = ".$data['frecuenciaRespiratoria'].",
-                valorFrecuenciaRespiratoria = ".$data['valorFrecuenciaRespiratoria'].",
-                co2 = ".$data['co2'].",
-                valorCo2 = ".$data['valorCo2'].",
-                satO2 = ".$data['satO2']." ,
-                valorSatO2 = ".$data['valorSatO2']." WHERE id = ".$data['userId']. ";";
-
-        
-        $bigQuery = $this->connection->getBigQuery();
-        try {
-            $job = $bigQuery->runQuery(
-                $bigQuery->query($query),
-                [
-                    'configuration' => [
-                        'query' => [
-                            'useLegacySql' => false
-                        ]
-                    ]
-                ]);
-            $job->waitUntilComplete();
-            if ($job->isComplete()) {
-                return $job->info()["numDmlAffectedRows"];
-            } else {
-                $error = $job->info()['status']['errorResult'] ?? 'Unknown error';
-                throw new \Exception('BigQuery job failed: '  . json_encode($error));
-            }
-        } catch (\Exception $e) {
-            throw new \Exception(print_r($query, true) ."\n".  $e->getMessage());
-        }
-
-    }
-
 
     /**
      * Inserta un nuevo registro en la tabla 'pacientes_cirugia'.
@@ -165,38 +55,30 @@ class DDatosPersonales {
            
             $stmt = $this->connection->getConnection()->prepare($sql);
 
-           
             $stmt->bindValue(':id', $data['id'], PDO::PARAM_STR);
             $stmt->bindValue(':genero', $data['genero'], PDO::PARAM_STR);
             $stmt->bindValue(':asa', $data['asa'], PDO::PARAM_STR);
             $stmt->bindValue(':tipocirugia', $data['tipocirugia'], PDO::PARAM_STR);
             $stmt->bindValue(':otracirugia', $data['otracirugia'] ?? "", PDO::PARAM_STR);
-            
             $stmt->bindValue(':fechanacimiento', $data['fechanacimiento'], PDO::PARAM_STR);
             $stmt->bindValue(':fechacirugia', $data['fechacirugia'], PDO::PARAM_STR);
             $stmt->bindValue(':created_at', $data['created_at'], PDO::PARAM_STR);
-
             $stmt->bindValue(':edad', (int)$data['edad'], PDO::PARAM_INT);
-            
             $stmt->bindValue(':imc', (float)$data['imc'], PDO::PARAM_STR);
             $stmt->bindValue(':peso', (float)$data['peso'], PDO::PARAM_STR);
             $stmt->bindValue(':talla', (float)$data['talla'], PDO::PARAM_STR);
 
-            // 4. Ejecutar la declaración
             $success = $stmt->execute();
             //print_r($success);
             //exit;
             if (!$success) {
-                 // Puedes obtener información de error si la ejecución falla
                 $errorInfo = $stmt->errorInfo();
                 error_log("Error SQL: " . print_r($errorInfo, true));
                 throw new \Exception("Error al ejecutar la consulta SQL.");
             }
-
             return true;
 
         } catch (\PDOException $e) {
-            // Manejar errores de PDO (conexión, sintaxis, etc.)
             error_log("PDO Error en save(): " . $e->getMessage());
             throw new \Exception("Error de persistencia al guardar el paciente." . $e->getMessage());
         }
