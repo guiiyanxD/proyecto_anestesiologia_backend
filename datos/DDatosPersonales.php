@@ -1,5 +1,5 @@
 <?php
-require_once('../config/Connection.php');
+
 require_once('../config/Pgsql.php');
 class DDatosPersonales {
     
@@ -69,8 +69,7 @@ class DDatosPersonales {
             $stmt->bindValue(':talla', (float)$data['talla'], PDO::PARAM_STR);
 
             $success = $stmt->execute();
-            //print_r($success);
-            //exit;
+            
             if (!$success) {
                 $errorInfo = $stmt->errorInfo();
                 error_log("Error SQL: " . print_r($errorInfo, true));

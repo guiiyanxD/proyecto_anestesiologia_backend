@@ -12,7 +12,9 @@ class NDatosInstraOperatorios{
         try{
             $data['created_at'] = date("Y-m-d H:i:s");
             $data = $this->mapAndCleanUpdateData($data);
-            $numFilasAfectadas = $this->capaDatos->insertIntraOperatorios($data);
+            //print_r($data);
+            //exit;
+            $numFilasAfectadas = $this->capaDatos->savePgsql($data);
             if($numFilasAfectadas === 0){
                 throw new \Exception("No se actualizaron filas. Error en la BD.");
             }
@@ -45,26 +47,26 @@ class NDatosInstraOperatorios{
     {
         return [
             'id'                            => (string)$data['userId'],
-            'induccionPropofol'             => (int)$data['induccionPropofol'],
-            'induccionDexmedetomidina'      => (int)$data['induccionDexmedetomidina'],
-            'induccionLidocaina'            => (int)$data['induccionLidocaina'],
-            'induccionKetamina'             => (int)$data['induccionKetamina'],
-            'mantenimientoPropofol'         => (int)$data['mantenimientoPropofol'],
-            'mantenimientoDexmedetomidina'  => (int)$data['mantenimientoDexmedetomidina'],
-            'mantenimientoLidocaina'        => (int)$data['mantenimientoLidocaina'],
-            'mantenimientoKetamina'         => (int)$data['mantenimientoKetamina'],
+            'induccionpropofol'             => (float)$data['induccionPropofol'],
+            'inducciondexmedetomidina'      => (float)$data['induccionDexmedetomidina'],
+            'induccionlidocaina'            => (float)$data['induccionLidocaina'],
+            'induccionketamina'             => (float)$data['induccionKetamina'],
+            'mantenimientopropofol'         => (float)$data['mantenimientoPropofol'],
+            'mantenimientodexmedetomidina'  => (float)$data['mantenimientoDexmedetomidina'],
+            'mantenimientolidocaina'        => (float)$data['mantenimientoLidocaina'],
+            'mantenimientoketamina'         => (float)$data['mantenimientoKetamina'],
             'despertar'                     => (int)$data['despertar'],
-            'presionArterial'               => (bool)$data['presionArterial'] ?? false,
-            'frecuenciaCardiaca'            => (bool)$data['frecuenciaCardiaca'] ?? false,
-            'frecuenciaRespiratoria'        => (bool)$data['frecuenciaRespiratoria'] ?? false,
+            'presionarterial'               => (bool)$data['presionArterial'] ?? false,
+            'frecuenciacardiaca'            => (bool)$data['frecuenciaCardiaca'] ?? false,
+            'frecuenciarespiratoria'        => (bool)$data['frecuenciaRespiratoria'] ?? false,
             'co2'                           => (bool)$data['co2'] ?? false,
-            'satO2'                         => (bool)$data['satO2'] ?? false,
-            'tiempoQx'                      => (int)($data['tiempoQx']),
-            'valorPresionArterial'          => (String)($data['valorPresionArterial'] ?? "NO"),
-            'valorFrecuenciaCardiaca'       => (String)($data['valorFrecuenciaCardiaca'] ?? "NO"),
-            'valorFrecuenciaRespiratoria'   => (String)($data['valorFrecuenciaRespiratoria'] ?? "NO"),
-            'valorSatO2'                    => (String)($data['valorSatO2'] ?? "NO"),
-            'valorCo2'                      => (String)($data['valorCo2'] ?? "NO"),
+            'sato2'                         => (bool)$data['satO2'] ?? false,
+            'tiempoqx'                      => (int)($data['tiempoQx']),
+            'valorpresionarterial'          => (String)($data['valorPresionArterial'] ?? "NO"),
+            'valorfrecuenciacardiaca'       => (String)($data['valorFrecuenciaCardiaca'] ?? "NO"),
+            'valorfrecuenciarespiratoria'   => (String)($data['valorFrecuenciaRespiratoria'] ?? "NO"),
+            'valorsato2'                    => (String)($data['valorSatO2'] ?? "NO"),
+            'valorco2'                      => (String)($data['valorCo2'] ?? "NO"),
             'created_at'                    => $data['created_at']
 
         ];
