@@ -10,7 +10,7 @@ class NDatosPostOperatorios {
         try{
             $data['created_at'] = date('Y-m-d H:i:s');
             $data = $this->mapAndCleanUpdateData($data);
-            $this->capaDatos->insertPostOperatorios($data);
+            $this->capaDatos->savePgsql($data);
 
             header('Content-Type: application/json'); 
             http_response_code(200);
@@ -41,16 +41,16 @@ class NDatosPostOperatorios {
     {
         return [
             'id'                            => (string)$data['userId'],
-            'recuperacionPostAnestesia'     => (int)$data['recuperacionPostAnestesia'],
+            'recuperacionpostanestesia'     => (int)$data['recuperacionPostAnestesia'],
             'ramsay'                        => (int)$data['ramsay'],
-            'evaIngreso'                    => (int)$data['evaIngreso'],
+            'evaingreso'                    => (int)$data['evaIngreso'],
             'eva1hr'                        => (int)$data['eva1hr'],
             'nauseas'                       => (bool)$data['nauseas'],
             'vomitos'                       => (bool)$data['vomitos'],
-            'consumoAnalgesico'             => (bool)$data['consumoAnalgesico'],
-            'tipoAnalgesico'                => (string)($data['tipoAnalgesico'] ?? ""),
-            'depresionRespiratoria'         => (bool)$data['depresionRespiratoria'],
-            'spo2Bajo'                      => (string)($data['spo2Bajo'] ?? 0),
+            'consumoanalgesico'             => (bool)$data['consumoAnalgesico'],
+            'tipoanalgesico'                => (string)($data['tipoAnalgesico'] ?? "NO"),
+            'depresionrespiratoria'         => (bool)$data['depresionRespiratoria'],
+            'spo2bajo'                      => (string)($data['spo2Bajo'] ?? "NO"),
             'created_at'                    => $data['created_at']
 
         ];
