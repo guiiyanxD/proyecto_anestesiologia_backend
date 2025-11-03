@@ -4,6 +4,7 @@ define('ROOT_PATH', dirname(__DIR__));
 require_once("../negocios/NDatosPersonales.php");
 require_once("../negocios/NDatosIntraOperatorios.php");
 require_once("../negocios/NDatosPostOperatorios.php");
+require_once("../negocios/NPerfil.php");
 require_once("../vendor/autoload.php");
 
 header("Access-Control-Allow-Origin: http://localhost:8080");
@@ -35,8 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['REQUEST_URI'] === '/') {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/user') {     
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
-    $formulario = new NDatosPersonales();
-    $total = $formulario->getUserData($data);
+    
+    $perfil = new NPerfil();
+    $total = $perfil->getUserData($data);
 } 
 
 /**
