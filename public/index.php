@@ -41,6 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/user')
     $total = $perfil->getUserData($data);
 } 
 
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['REQUEST_URI'] === '/getUltimosRegistros') {     
+    $formulario = new NPerfil();
+    $formulario->getUltimos10();
+} 
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['REQUEST_URI'] === '/ver-todo') {     
+    $formulario = new NPerfil();
+    $formulario->getTodosRegistros();
+} 
+
 /**
  * Insert Data To Datos_Personales table on BigQuery
  */

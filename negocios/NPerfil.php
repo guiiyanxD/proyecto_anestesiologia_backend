@@ -44,4 +44,38 @@ class NPerfil {
             'id'=> (string)$data['userId'],
         ];
     }
+
+    public function getUltimos10() {
+        try {
+            $registros = $this->capaDatos->getUltimos10();
+            
+            header('Content-Type: application/json');
+            http_response_code(200);
+
+            echo json_encode([
+                'status' => 'success',
+                'data' => $registros
+            ]);
+            exit;
+        } catch(\Exception $e) {
+            // manejo de error
+        }
+    }
+
+
+    public function getTodosRegistros() {
+        try {
+            $registros = $this->capaDatos->getAll();
+            
+            header('Content-Type: application/json');
+            http_response_code(200);
+            echo json_encode([
+                'status' => 'success',
+                'data' => $registros
+            ]);
+            exit;
+        } catch(\Exception $e) {
+            // manejo de error
+        }
+    }
 }

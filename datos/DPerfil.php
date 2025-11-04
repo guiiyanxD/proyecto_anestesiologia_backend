@@ -34,4 +34,50 @@ class DPerfil {
             throw new \Exception("Error al obtener los datos de la BD: " . $e->getMessage());
         }
     }
+
+    public function getUltimos10(){
+        $query = "SELECT *
+            FROM datos_personales ORDER BY created_at DESC";
+
+        try {
+            $stmt = $this->connection->getConnection()->prepare($query);
+            
+            
+            $success = $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!$success) {
+                $errorInfo = $stmt->errorInfo();
+                error_log("Error SQL: " . print_r($errorInfo, true));
+                throw new \Exception("Error al ejecutar la consulta SQL.");
+            }
+            return $result;
+
+        } catch (\Exception $e) {
+            throw new \Exception("Error al obtener los datos de la BD: " . $e->getMessage());
+        }
+    }
+    
+    public function getAll(){
+        $query = "SELECT *
+            FROM datos_personales ORDER BY created_at DESC";
+
+        try {
+            $stmt = $this->connection->getConnection()->prepare($query);
+            
+            
+            $success = $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!$success) {
+                $errorInfo = $stmt->errorInfo();
+                error_log("Error SQL: " . print_r($errorInfo, true));
+                throw new \Exception("Error al ejecutar la consulta SQL.");
+            }
+            return $result;
+
+        } catch (\Exception $e) {
+            throw new \Exception("Error al obtener los datos de la BD: " . $e->getMessage());
+        }
+    }
 }
