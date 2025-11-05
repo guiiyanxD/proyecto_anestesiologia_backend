@@ -1,11 +1,11 @@
 steps:
   # Construir la imagen Docker
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/mi-api-php:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/anestesio-api:$COMMIT_SHA', '.']
   
   # Subir la imagen a Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/mi-api-php:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/anestesio-api:$COMMIT_SHA']
   
   # Desplegar a Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
