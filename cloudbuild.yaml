@@ -1,3 +1,4 @@
+
 steps:
   # Construir la imagen Docker
   - name: 'gcr.io/cloud-builders/docker'
@@ -16,7 +17,11 @@ steps:
       - '--image=gcr.io/$PROJECT_ID/anestesio-api:$COMMIT_SHA'
       - '--platform=managed'
       - '--region=us-central1'
+      - '--ingress=internal'
+      - '--add-cloudsql-instances=plenary-glass-470415-k1:us-central1:proy-anes'
       - '--allow-unauthenticated'
+      - '--set-env-vars=DB_HOST=/cloudsql/plenary-glass-470415-k1:us-central1:proy-anes,DB_NAME=postgres,DB_USER=postgres,DB_PORT=5432'
+      - '--update-secrets=DB_PASSWORD=proy-anestesio-pgsql-db-password:latest'
 
 # Configuración de logging
 options:
