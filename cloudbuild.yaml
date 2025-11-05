@@ -23,4 +23,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 images:
-  - 'gcr.io/$PROJECT_ID/mi-api-php:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/anestesio-api:$COMMIT_SHA'
