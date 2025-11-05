@@ -16,8 +16,8 @@ class Connection{
     public function __construct() {
         if($this->bigQuery == null){
             $this->bigQuery = new BigQueryClient([
-                'keyFilePath' => '../plenary-glass-470415-k1-58a5f3c2565c.json',
-                'projectId' => 'plenary-glass-470415-k1',
+               
+                'projectId' => '',
             ]);
             $this->dataset = $this->bigQuery->dataset('second_proy_at');
             $this->table = $this->dataset->table('datos_personales');
