@@ -9,6 +9,6 @@ CREATE TABLE datos_personales (
     edad INT NOT NULL,
     imc DECIMAL(5, 2) NOT NULL, 
     peso DECIMAL(5, 2) NOT NULL, 
-    talla DECIMAL(4, 2) NOT NULL, 
+    talla DECIMAL(5, 2) NOT NULL, 
     created_at DATETIME NOT NULL 
 );
