@@ -123,6 +123,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/saveDa
     exit;
 }
 
+
+/**
+ * Update Datos Personales
+ */
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/updateDatosPersonales') {
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+    
+    // Validar que venga el ID
+    if (!isset($data['id']) || empty($data['id'])) {
+        http_response_code(400);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'ID del paciente es requerido'
+        ]);
+        exit;
+    }
+    
+    try {
+        $formulario = new NDatosPersonales();
+        $result = $formulario->updateDatosPersonales($data);
+        
+        http_response_code(200);
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Datos actualizados correctamente',
+            'data' => $result
+        ]);
+    } catch (\Exception $e) {
+        http_response_code(500);
+        echo json_encode([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ]);
+    }
+    exit;
+}
+
+
+
 /**
  * Save Datos Intra Operatorios
  */

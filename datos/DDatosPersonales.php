@@ -82,5 +82,65 @@ class DDatosPersonales {
             throw new \Exception("Error de persistencia al guardar el paciente." . $e->getMessage());
         }
     }  
+
+
+    /**
+     * Actualizar registro en PostgreSQL
+     * 
+     * @param array $data Datos a actualizar
+     * @return bool True si se actualizó correctamente
+     * @throws Exception Si hay error en la base de datos
+     */
+    public function updatePgsql(array $data): bool {
+        $sql = "UPDATE datos_personales SET
+            fechanacimiento = :fechanacimiento,
+            fechacirugia = :fechacirugia,
+            genero = :genero,
+            asa = :asa,
+            tipocirugia = :tipocirugia,
+            otracirugia = :otracirugia,
+            edad = :edad,
+            imc = :imc,
+            peso = :peso,
+            talla = :talla
+        WHERE id = :id";
+
+        try {
+            $stmt = $this->connection->getConnection()->prepare($sql);
+
+            $stmt->bindValue(':id', $data['id'], PDO::PARAM_STR);
+            $stmt->bindValue(':genero', $data['genero'], PDO::PARAM_STR);
+            $stmt->bindValue(':asa', $data['asa'], PDO::PARAM_STR);
+            $stmt->bindValue(':tipocirugia', $data['tipocirugia'], PDO::PARAM_STR);
+            $stmt->bindValue(':otracirugia', $data['otracirugia'] ?? "", PDO::PARAM_STR);
+            $stmt->bindValue(':fechanacimiento', $data['fechanacimiento'], PDO::PARAM_STR);
+            $stmt->bindValue(':fechacirugia', $data['fechacirugia'], PDO::PARAM_STR);
+            $stmt->bindValue(':edad', (int)$data['edad'], PDO::PARAM_INT);
+            $stmt->bindValue(':imc', (float)$data['imc'], PDO::PARAM_STR);
+            $stmt->bindValue(':peso', (float)$data['peso'], PDO::PARAM_STR);
+            $stmt->bindValue(':talla', (float)$data['talla'], PDO::PARAM_STR);
+
+            $success = $stmt->execute();
+            
+            if (!$success) {
+                $errorInfo = $stmt->errorInfo();
+                error_log("Error SQL en UPDATE: " . print_r($errorInfo, true));
+                throw new \Exception("Error al ejecutar la consulta UPDATE.");
+            }
+            
+            // Verificar que se actualizó al menos un registro
+            if ($stmt->rowCount() === 0) {
+                error_log("ADVERTENCIA: UPDATE no afectó ninguna fila para ID: " . $data['id']);
+                // Podrías lanzar una excepción aquí si quieres ser estricto
+                // throw new \Exception("No se encontró el registro a actualizar");
+            }
+            
+            return true;
+
+        } catch (\PDOException $e) {
+            error_log("PDO Error en updatePgsql(): " . $e->getMessage());
+            throw new \Exception("Error de persistencia al actualizar el paciente: " . $e->getMessage());
+        }
+    }
 }
 
