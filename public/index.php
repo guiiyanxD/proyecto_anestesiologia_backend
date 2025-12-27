@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/update
     $data = json_decode($json, true);
     
     // Validar que venga el ID
-    if (!isset($data['id']) || empty($data['id'])) {
+    if (!isset($data['userId']) || empty($data['userId'])) {
         http_response_code(400);
         echo json_encode([
             'status' => 'error',
@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] === '/update
     }
     
     try {
-        $formulario = new NDatosIntraOperatorios();
+        $formulario = new NDatosInstraOperatorios();
         $result = $formulario->updateDatosIntraOperatorios($data);
         
         http_response_code(200);
