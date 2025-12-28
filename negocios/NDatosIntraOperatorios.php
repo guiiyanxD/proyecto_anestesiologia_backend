@@ -126,7 +126,7 @@ class NDatosInstraOperatorios{
             'ketorol' => (bool)($data['ketorol'] ?? false),
             
             // Timestamps
-            //'created_at' => $data['created_at'] ?? null
+            'created_at' => $data['created_at'] ?? null
         ];
     }
 }
