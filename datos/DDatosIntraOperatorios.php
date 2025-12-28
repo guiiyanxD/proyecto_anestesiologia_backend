@@ -99,34 +99,24 @@ class DDatosIntraOperatorios{
             $stmt->bindValue(':tiempoqx', $data['tiempoqx'], PDO::PARAM_INT);
             
             // Fármacos de Inducción (checkboxes)
-            $stmt->bindValue(':induccionpropofol', $data['induccionpropofol'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':inducciondexmedetomidina', $data['inducciondexmedetomidina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':induccionlidocaina', $data['induccionlidocaina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':induccionketamina', $data['induccionketamina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':induccionrnm', $data['induccionrnm'], PDO::PARAM_BOOL);
+            $stmt->bindValue(':induccionpropofol', (int)$data['induccionpropofol'], PDO::PARAM_INT);
+            $stmt->bindValue(':inducciondexmedetomidina', (int)$data['inducciondexmedetomidina'], PDO::PARAM_INT);
+            $stmt->bindValue(':induccionlidocaina', (int)$data['induccionlidocaina'], PDO::PARAM_INT);
+            $stmt->bindValue(':induccionketamina', (int)$data['induccionketamina'], PDO::PARAM_INT);
+            $stmt->bindValue(':induccionrnm', (int)$data['induccionrnm'], PDO::PARAM_INT);
             
             // Fármacos de Mantenimiento (checkboxes)
-            $stmt->bindValue(':mantenimientosevorane', $data['mantenimientosevorane'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':mantenimientodexmedetomidina', $data['mantenimientodexmedetomidina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':mantenimientolidocaina', $data['mantenimientolidocaina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':mantenimientoketamina', $data['mantenimientoketamina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':mantenimientosulfatomg', $data['mantenimientosulfatomg'], PDO::PARAM_BOOL);
-            
+            $stmt->bindValue(':mantenimientosevorane', (int)$data['mantenimientosevorane'], PDO::PARAM_INT);
+            $stmt->bindValue(':mantenimientodexmedetomidina', (int)$data['mantenimientodexmedetomidina'], PDO::PARAM_INT);
+            $stmt->bindValue(':mantenimientolidocaina', (int)$data['mantenimientolidocaina'], PDO::PARAM_INT);
+            $stmt->bindValue(':mantenimientoketamina', (int)$data['mantenimientoketamina'], PDO::PARAM_INT);
+            $stmt->bindValue(':mantenimientosulfatomg', (int)$data['mantenimientosulfatomg'], PDO::PARAM_INT);
+                
             // Coadyuvantes (checkboxes)
-            $stmt->bindValue(':ondasetron', $data['ondasetron'], PDO::PARAM_BOOL);
-            //$stmt->bindValue(':valorondasetron', $data['valorondasetron'], PDO::PARAM_STR);
-            
-            // Coadyuvantes - Metamizol
-            $stmt->bindValue(':metamizol', $data['metamizol'], PDO::PARAM_BOOL);
-            //$stmt->bindValue(':valormetamizol', $data['valormetamizol'], PDO::PARAM_STR);
-            
-            // Coadyuvantes - Dexametasona
-            $stmt->bindValue(':dexametasona', $data['dexametasona'], PDO::PARAM_BOOL);
-            //$stmt->bindValue(':valordexametasona', $data['valordexametasona'], PDO::PARAM_STR);
-            
-            // Coadyuvantes - Ketorol
-            $stmt->bindValue(':ketorol', $data['ketorol'], PDO::PARAM_BOOL);
-            //$stmt->bindValue(':valorketorol', $data['valorketorol'], PDO::PARAM_STR);
+            $stmt->bindValue(':ondasetron', (int)$data['ondasetron'], PDO::PARAM_INT);
+            $stmt->bindValue(':metamizol', (int)$data['metamizol'], PDO::PARAM_INT);
+            $stmt->bindValue(':dexametasona', (int)$data['dexametasona'], PDO::PARAM_INT);
+            $stmt->bindValue(':ketorol', (int)$data['ketorol'], PDO::PARAM_INT);
             
             // Timestamps
             $stmt->bindValue(':created_at', $data['created_at'], PDO::PARAM_STR);
@@ -143,7 +133,7 @@ class DDatosIntraOperatorios{
 
         } catch (\PDOException $e) {
             error_log("PDO Error en savePgsql(): " . $e->getMessage());
-            throw new \Exception("Error de persistencia al guardar datos intraoperatorios: " . $e->getMessage());
+            throw new \Exception("-- " . $e->getMessage());
         }
     }
 
@@ -216,24 +206,24 @@ class DDatosIntraOperatorios{
             $stmt->bindValue(':tiempoqx', $data['tiempoqx'], PDO::PARAM_INT);
             
             // Fármacos de Inducción (checkboxes)
-            $stmt->bindValue(':induccionpropofol', $data['induccionpropofol'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':inducciondexmedetomidina', $data['inducciondexmedetomidina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':induccionlidocaina', $data['induccionlidocaina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':induccionketamina', $data['induccionketamina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':induccionrnm', $data['induccionrnm'], PDO::PARAM_BOOL);
+            $stmt->bindValue(':induccionpropofol', (int)$data['induccionpropofol'], PDO::PARAM_INT);
+            $stmt->bindValue(':inducciondexmedetomidina', (int)$data['inducciondexmedetomidina'], PDO::PARAM_INT);
+            $stmt->bindValue(':induccionlidocaina', (int)$data['induccionlidocaina'], PDO::PARAM_INT);
+            $stmt->bindValue(':induccionketamina', (int)$data['induccionketamina'], PDO::PARAM_INT);
+            $stmt->bindValue(':induccionrnm', (int)$data['induccionrnm'], PDO::PARAM_INT);
             
             // Fármacos de Mantenimiento (checkboxes)
-            $stmt->bindValue(':mantenimientosevorane', $data['mantenimientosevorane'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':mantenimientodexmedetomidina', $data['mantenimientodexmedetomidina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':mantenimientolidocaina', $data['mantenimientolidocaina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':mantenimientoketamina', $data['mantenimientoketamina'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':mantenimientosulfatomg', $data['mantenimientosulfatomg'], PDO::PARAM_BOOL);
+            $stmt->bindValue(':mantenimientosevorane', (int)$data['mantenimientosevorane'], PDO::PARAM_INT);
+            $stmt->bindValue(':mantenimientodexmedetomidina', (int)$data['mantenimientodexmedetomidina'], PDO::PARAM_INT);
+            $stmt->bindValue(':mantenimientolidocaina', (int)$data['mantenimientolidocaina'], PDO::PARAM_INT);
+            $stmt->bindValue(':mantenimientoketamina', (int)$data['mantenimientoketamina'], PDO::PARAM_INT);
+            $stmt->bindValue(':mantenimientosulfatomg', (int)$data['mantenimientosulfatomg'], PDO::PARAM_INT);
             
             // Coadyuvantes (checkboxes)
-            $stmt->bindValue(':ondasetron', $data['ondasetron'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':metamizol', $data['metamizol'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':dexametasona', $data['dexametasona'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':ketorol', $data['ketorol'], PDO::PARAM_BOOL);
+            $stmt->bindValue(':ondasetron', (int)$data['ondasetron'], PDO::PARAM_INT);
+            $stmt->bindValue(':metamizol', (int)$data['metamizol'], PDO::PARAM_INT);
+            $stmt->bindValue(':dexametasona', (int)$data['dexametasona'], PDO::PARAM_INT);
+            $stmt->bindValue(':ketorol', (int)$data['ketorol'], PDO::PARAM_INT);
 
             $success = $stmt->execute();
             
