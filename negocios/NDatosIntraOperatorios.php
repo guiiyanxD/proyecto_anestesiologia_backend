@@ -40,7 +40,34 @@ class NDatosInstraOperatorios{
     }
 
     public function updateDatosIntraOperatorios($data){
-        
+        try{
+            //$data['created_at'] = date("Y-m-d H:i:s");
+            $data = $this->mapAndCleanUpdateData($data);
+            //echo json_encode($data);
+            //exit;
+            $numFilasAfectadas = $this->capaDatos->updatePgsql($data);
+            if($numFilasAfectadas === 0){
+                throw new \Exception("No se actualizaron filas. Error en la BD.");
+            }
+            header('Content-Type: application/json'); 
+            http_response_code(200);
+
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Datos intraoperatorios actualizados correctamente'
+            ]);
+            exit;
+
+        }catch(\Exception $e){
+            header('Content-Type: application/json'); 
+            http_response_code(400); 
+            echo json_encode([
+                'status' => 'failed',
+                'message' => "Error al guardar los datos intraoperatorios " . $e->getMessage()
+            ]);
+            exit;
+
+        } 
     }
 
     /**
@@ -48,65 +75,58 @@ class NDatosInstraOperatorios{
      * Puedes usar esto para castear valores a FLOAT, INT, etc.
      */
     private function mapAndCleanUpdateData(array $data): array
-{
-    return [
-        'id' => (string)$data['userId'],
-        
-        // Signos Vitales - Presión Arterial
-        'pasistolica_ini' => isset($data['pasistolica_ini']) ? (int)$data['pasistolica_ini'] : null,
-        'padiastolica_ini' => isset($data['padiastolica_ini']) ? (int)$data['padiastolica_ini'] : null,
-        'pasistolica_postint' => isset($data['pasistolica_postint']) ? (int)$data['pasistolica_postint'] : null,
-        'padiastolica_postint' => isset($data['padiastolica_postint']) ? (int)$data['padiastolica_postint'] : null,
-        'pasistolica_fin' => isset($data['pasistolica_fin']) ? (int)$data['pasistolica_fin'] : null,
-        'padiastolica_fin' => isset($data['padiastolica_fin']) ? (int)$data['padiastolica_fin'] : null,
-        
-        // Signos Vitales - Frecuencia Cardíaca
-        'fcard_ini' => isset($data['fcard_ini']) ? (int)$data['fcard_ini'] : null,
-        'fcard_postint' => isset($data['fcard_postint']) ? (int)$data['fcard_postint'] : null,
-        'fcard_fin' => isset($data['fcard_fin']) ? (int)$data['fcard_fin'] : null,
-        
-        // Signos Vitales - Saturación O2
-        'sato_ini' => isset($data['sato_ini']) ? (int)$data['sato_ini'] : null,
-        'sato_postint' => isset($data['sato_postint']) ? (int)$data['sato_postint'] : null,
-        'sato_fin' => isset($data['sato_fin']) ? (int)$data['sato_fin'] : null,
-        
-        // Otros Signos Vitales
-        'etco2' => isset($data['etco2']) ? (float)$data['etco2'] : null,
-        'bis' => isset($data['bis']) ? (int)$data['bis'] : null,
-        
-        // Tiempo Quirúrgico
-        'despertar' => isset($data['despertar']) ? (int)$data['despertar'] : null,
-        'tiempoqx' => isset($data['tiempoQx']) ? (int)$data['tiempoQx'] : null,
-        
-        // Fármacos de Inducción
-        'induccionpropofol' => isset($data['induccionPropofol']) ? (float)$data['induccionPropofol'] : null,
-        'inducciondexmedetomidina' => isset($data['induccionDexmedetomidina']) ? (float)$data['induccionDexmedetomidina'] : null,
-        'induccionlidocaina' => isset($data['induccionLidocaina']) ? (float)$data['induccionLidocaina'] : null,
-        'induccionketamina' => isset($data['induccionKetamina']) ? (float)$data['induccionKetamina'] : null,
-        'induccionrnm' => isset($data['induccionRNM']) ? (float)$data['induccionRNM'] : null,
-        
-        // Fármacos de Mantenimiento
-        'mantenimientosevorane' => isset($data['mantenimientoSevorane']) ? (float)$data['mantenimientoSevorane'] : null,
-        'mantenimientodexmedetomidina' => isset($data['mantenimientoDexmedetomidina']) ? (float)$data['mantenimientoDexmedetomidina'] : null,
-        'mantenimientolidocaina' => isset($data['mantenimientoLidocaina']) ? (float)$data['mantenimientoLidocaina'] : null,
-        'mantenimientoketamina' => isset($data['mantenimientoKetamina']) ? (float)$data['mantenimientoKetamina'] : null,
-        'mantenimientosulfatomg' => isset($data['mantenimientoSulfatoMg']) ? (float)$data['mantenimientoSulfatoMg'] : null,
-        
-        // Coadyuvantes - Checkboxes
-        'ondasetron' => (bool)($data['ondasetron'] ?? false),
-        'valorondasetron' => isset($data['valorOndasetron']) ? (float)$data['valorOndasetron'] : null,
-        
-        'metamizol' => (bool)($data['metamizol'] ?? false),
-        'valormetamizol' => isset($data['valorMetamizol']) ? (float)$data['valorMetamizol'] : null,
-        
-        'dexametasona' => (bool)($data['dexametasona'] ?? false),
-        'valordexametasona' => isset($data['valorDexametasona']) ? (float)$data['valorDexametasona'] : null,
-        
-        'ketorol' => (bool)($data['ketorol'] ?? false),
-        'valorketorol' => isset($data['valorKetorol']) ? (float)$data['valorKetorol'] : null,
-        
-        // Timestamps
-        'created_at' => $data['created_at'] ?? null
-    ];
-}
+    {
+        return [
+            'id' => (string)$data['userId'],
+            
+            // Signos Vitales - Presión Arterial
+            'pasistolica_ini' => (int)$data['pasistolica_ini'],
+            'padiastolica_ini' => (int)$data['padiastolica_ini'],
+            'pasistolica_postint' => (int)$data['pasistolica_postint'],
+            'padiastolica_postint' => (int)$data['padiastolica_postint'],
+            'pasistolica_fin' => (int)$data['pasistolica_fin'],
+            'padiastolica_fin' => (int)$data['padiastolica_fin'],
+            
+            // Signos Vitales - Frecuencia Cardíaca
+            'fcard_ini' => (int)$data['fcard_ini'],
+            'fcard_postint' => (int)$data['fcard_postint'],
+            'fcard_fin' => (int)$data['fcard_fin'],
+            
+            // Signos Vitales - Saturación O2
+            'sato_ini' => (int)$data['sato_ini'],
+            'sato_postint' => (int)$data['sato_postint'],
+            'sato_fin' => (int)$data['sato_fin'],
+            
+            // Otros Signos Vitales
+            'etco2' => (float)$data['etco2'],
+            'bis' => (int)$data['bis'],
+            
+            // Tiempo Quirúrgico
+            'despertar' => (int)$data['despertar'],
+            'tiempoqx' => (int)$data['tiempoQx'],
+            
+            // Fármacos de Inducción (checkboxes)
+            'induccionpropofol' => (bool)($data['induccionPropofol'] ?? false),
+            'inducciondexmedetomidina' => (bool)($data['induccionDexmedetomidina'] ?? false),
+            'induccionlidocaina' => (bool)($data['induccionLidocaina'] ?? false),
+            'induccionketamina' => (bool)($data['induccionKetamina'] ?? false),
+            'induccionrnm' => (bool)($data['induccionRNM'] ?? false),
+            
+            // Fármacos de Mantenimiento (checkboxes)
+            'mantenimientosevorane' => (bool)($data['mantenimientoSevorane'] ?? false),
+            'mantenimientodexmedetomidina' => (bool)($data['mantenimientoDexmedetomidina'] ?? false),
+            'mantenimientolidocaina' => (bool)($data['mantenimientoLidocaina'] ?? false),
+            'mantenimientoketamina' => (bool)($data['mantenimientoKetamina'] ?? false),
+            'mantenimientosulfatomg' => (bool)($data['mantenimientoSulfatoMg'] ?? false),
+            
+            // Coadyuvantes (checkboxes)
+            'ondasetron' => (bool)($data['ondasetron'] ?? false),
+            'metamizol' => (bool)($data['metamizol'] ?? false),
+            'dexametasona' => (bool)($data['dexametasona'] ?? false),
+            'ketorol' => (bool)($data['ketorol'] ?? false),
+            
+            // Timestamps
+            //'created_at' => $data['created_at'] ?? null
+        ];
+    }
 }
