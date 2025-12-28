@@ -114,19 +114,19 @@ class DDatosIntraOperatorios{
             
             // Coadyuvantes - Ondasetron
             $stmt->bindValue(':ondasetron', $data['ondasetron'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':valorondasetron', $data['valorondasetron'], PDO::PARAM_STR);
+            //$stmt->bindValue(':valorondasetron', $data['valorondasetron'], PDO::PARAM_STR);
             
             // Coadyuvantes - Metamizol
             $stmt->bindValue(':metamizol', $data['metamizol'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':valormetamizol', $data['valormetamizol'], PDO::PARAM_STR);
+            //$stmt->bindValue(':valormetamizol', $data['valormetamizol'], PDO::PARAM_STR);
             
             // Coadyuvantes - Dexametasona
             $stmt->bindValue(':dexametasona', $data['dexametasona'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':valordexametasona', $data['valordexametasona'], PDO::PARAM_STR);
+            //$stmt->bindValue(':valordexametasona', $data['valordexametasona'], PDO::PARAM_STR);
             
             // Coadyuvantes - Ketorol
             $stmt->bindValue(':ketorol', $data['ketorol'], PDO::PARAM_BOOL);
-            $stmt->bindValue(':valorketorol', $data['valorketorol'], PDO::PARAM_STR);
+            //$stmt->bindValue(':valorketorol', $data['valorketorol'], PDO::PARAM_STR);
             
             // Timestamps
             $stmt->bindValue(':created_at', $data['created_at'], PDO::PARAM_STR);

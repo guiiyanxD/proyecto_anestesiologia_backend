@@ -28,7 +28,7 @@ class NDatosInstraOperatorios{
             exit;
 
         }catch(\Exception $e){
-            header('Content-Type: application/json'); 
+            //header('Content-Type: application/json'); 
             http_response_code(400); 
             echo json_encode([
                 'status' => 'failed',
